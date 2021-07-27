@@ -69,6 +69,7 @@ class Cuti extends CI_Controller
             $end = $post['end'];
             $jenis = $post['jenis'];
             if ($jenis == 1) {
+                $data_jenis = $this->db->where('id_jenis', $jenis)->get('jenis_cuti')->row_array();
                 $data = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=1 AND status_cuti=4 AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result_array();
                 $total = 0;
                 foreach ($data as $d) {
@@ -78,7 +79,7 @@ class Cuti extends CI_Controller
                     $lama = $diff->d + 1;
                     $total = $total + $lama;
                 }
-                $sisa = 12 - $total;
+                $sisa = $data_jenis['jumlah_hari'] - $total;
                 $awal1  = date_create($start);
                 $akhir1 = date_create($end);
                 $diff1  = date_diff($awal1, $akhir1);
@@ -100,7 +101,7 @@ class Cuti extends CI_Controller
                 $d1 = new DateTime($end);
                 $d2 = new DateTime($start);
                 $Months = $d2->diff($d1);
-                $howeverManyMonths = (($Months->y) * 12) + ($Months->m);
+                $howeverManyMonths = (($Months->y) * 12) + ($Months->m) - 1;
                 if ($howeverManyMonths < 3) {
                     $json = array(
                         'status' => '0100',
@@ -230,6 +231,7 @@ class Cuti extends CI_Controller
         $end = $this->input->get('end');
         $jenis = $this->input->get('jenis');
         if ($jenis == 1) {
+            $data_jenis = $this->db->where('id_jenis', $jenis)->get('jenis_cuti')->row_array();
             $data = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=1 AND status_cuti=4 AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result_array();
             $total = 0;
             foreach ($data as $d) {
@@ -239,7 +241,7 @@ class Cuti extends CI_Controller
                 $lama = $diff->d + 1;
                 $total = $total + $lama;
             }
-            $sisa = 12 - $total;
+            $sisa = $data_jenis['jumlah_hari'] - $total;
             $awal1  = date_create($start);
             $akhir1 = date_create($end);
             $diff1  = date_diff($awal1, $akhir1);
@@ -253,7 +255,7 @@ class Cuti extends CI_Controller
             $d1 = new DateTime($end);
             $d2 = new DateTime($start);
             $Months = $d2->diff($d1);
-            $howeverManyMonths = (($Months->y) * 12) + ($Months->m);
+            $howeverManyMonths = (($Months->y) * 12) + ($Months->m) - 1;
             if ($howeverManyMonths < 3) {
                 echo '<div class="alert alert-danger alert-dismissible">Batas limit cuti melahirkan selama 3 bulan.</div>';
             } else if ($howeverManyMonths > 3) {

@@ -4,6 +4,9 @@
             <div class="box box-widget">
                 <div class="box-body box-profile">
                     <h3 class="profile-username text-center">Jadwal Anda Hari Ini</h3>
+                    <?php if($jadwal==null) : ?>
+                        <p class="text-muted text-center">Jadwal Anda hari ini tidak ada</p>
+                    <?php else : ?>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
                             <b>Tanggal</b> <a class="pull-right"><?= format_indo($jadwal['tanggal_detail']) ?></a>
@@ -18,6 +21,7 @@
                             <b>Check Out</b> <a class="pull-right"><?= $jadwal['jam_keluar'] ?></a>
                         </li>
                     </ul>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
