@@ -10,6 +10,7 @@
                         <tr>
                             <th class="text-center">Action</th>
                             <th>Jenis Cuti</th>
+                            <th>Jumlah Hari</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -47,6 +48,7 @@
                         html += '<a href="javascript:void(0)" onclick="destroy(' + data[count].id + ')"><i class="icon-trash text-red"></i></a>';
                         html += '</td>';
                         html += '<td>' + data[count].nama + '</td>';
+                        html += '<td>' + data[count].jumlah + '</td>';
                         html += '</tr>';
                     }
                 }

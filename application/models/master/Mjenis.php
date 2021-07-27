@@ -26,7 +26,8 @@ class Mjenis extends CI_Model
     {
         $data = array(
             'id_jenis' => $this->kode(),
-            'nama_jenis' => $post['nama']
+            'nama_jenis' => $post['nama'],
+            'jumlah_hari' => $post['jumlah']
         );
         return $this->db->insert('jenis_cuti', $data);
     }
@@ -37,7 +38,8 @@ class Mjenis extends CI_Model
     public function update($post)
     {
         $data = array(
-            'nama_jenis' => $post['nama']
+            'nama_jenis' => $post['nama'],
+            'jumlah_hari' => $post['jumlah']
         );
         return $this->db->where('id_jenis', $post['kode'])->update('jenis_cuti', $data);
     }

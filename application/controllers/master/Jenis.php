@@ -29,7 +29,8 @@ class Jenis extends CI_Controller
                     foreach ($query as $row) {
                         $data[] = [
                             'id' => $row['id_jenis'],
-                            'nama' => $row['nama_jenis']
+                            'nama' => $row['nama_jenis'],
+                            'jumlah' => $row['jumlah_hari']
                         ];
                     }
                 }
@@ -49,6 +50,7 @@ class Jenis extends CI_Controller
     public function store()
     {
         $this->form_validation->set_rules('nama', 'Jenis Cuti', 'required');
+        $this->form_validation->set_rules('jumlah', 'Jumlah hari', 'required');
         $this->form_validation->set_message('required', errorRequired());
         $this->form_validation->set_error_delimiters(errorDelimiter(), errorDelimiter_close());
         if ($this->form_validation->run() == TRUE) {
@@ -82,6 +84,7 @@ class Jenis extends CI_Controller
     public function update()
     {
         $this->form_validation->set_rules('nama', 'Jenis Cuti', 'required');
+        $this->form_validation->set_rules('jumlah', 'Jumlah hari', 'required');
         $this->form_validation->set_message('required', errorRequired());
         $this->form_validation->set_error_delimiters(errorDelimiter(), errorDelimiter_close());
         if ($this->form_validation->run() == TRUE) {
