@@ -24,6 +24,14 @@ if (!function_exists('level_user')) {
         return $row['level_karyawan'];
     }
 }
+if (!function_exists('jenkel_karyawan')) {
+    function jenkel()
+    {
+        $CI =& get_instance();
+        $row = $CI->db->where('id_karyawan', id_user())->get('karyawan')->row_array();
+        return $row['jenkel_karyawan'];
+    }
+}
 if (!function_exists('profil_user')) {
     function profil_user()
     {

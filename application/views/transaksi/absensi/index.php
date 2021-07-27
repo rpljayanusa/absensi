@@ -2,7 +2,9 @@
     <div class="col-xs-12">
         <div class="box box-default">
             <div class="box-header with-border">
+            <?php if (level_user() != 2) { ?>
                 <button class="btn btn-social btn-flat btn-success btn-sm" title="Tambah Data" onclick="upload()"><i class="icon-plus3"></i> Upload Absensi</button>
+            <?php } ?>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-bordered table-striped data_absensi" id="table">

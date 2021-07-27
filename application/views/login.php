@@ -33,7 +33,7 @@
             <p class="login-box-msg">Masuk ke akun Anda</p>
             <?= form_open('login/signin', ['id' => 'form_signin', 'name' => 'form_signin']) ?>
             <div class="form-group has-feedback">
-                <input type="text" name="username" class="form-control" placeholder="Username">
+                <input type="text" name="username" class="form-control" placeholder="Username" autofocus>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 <span id="username_error" class="text-red"></span>
             </div>

@@ -4,6 +4,9 @@
             <div class="box box-widget">
                 <div class="box-body box-profile">
                     <h3 class="profile-username text-center">Jadwal Anda Hari Ini</h3>
+                    <?php if($jadwal==null) : ?>
+                        <p class="text-muted text-center">Jadwal Anda hari ini tidak ada</p>
+                    <?php else : ?>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
                             <b>Tanggal</b> <a class="pull-right"><?= format_indo($jadwal['tanggal_detail']) ?></a>
@@ -18,6 +21,7 @@
                             <b>Check Out</b> <a class="pull-right"><?= $jadwal['jam_keluar'] ?></a>
                         </li>
                     </ul>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -38,7 +42,7 @@
                             <b>Total</b> <a class="pull-right">12</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Pemakaian</b> <a class="pull-right"><?= $terpakai ?></a>
+                            <b>Digunakan</b> <a class="pull-right"><?= $terpakai ?></a>
                         </li>
                         <li class="list-group-item">
                             <b>Sisa</b> <a class="pull-right"><?= 12 - $terpakai ?></a>
@@ -47,29 +51,31 @@
                 </div>
             </div>
         </div>
+        <?php if (jenkel() == 2) { ?>
         <div class="col-md-3">
             <div class="box box-widget">
                 <div class="box-body box-profile">
                     <h3 class="profile-username text-center">Cuti Melahirkan</h3>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Pemakaian</b> <a class="pull-right"><?= $lahir['total'] ?></a>
+                            <b>Digunakan</b> <a class="pull-right"><?= $lahir['total'] ?></a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+    <?php } ?>
+        <!-- <div class="col-md-3">
             <div class="box box-widget">
                 <div class="box-body box-profile">
                     <h3 class="profile-username text-center">Lainnya</h3>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Pemakaian</b> <a class="pull-right"><?= $other['total'] ?></a>
+                            <b>Digunakan</b> <a class="pull-right"><?= $other['total'] ?></a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 <?php } ?>

@@ -15,6 +15,14 @@ $route['unit/edit'] = 'master/unit/edit';
 $route['unit/update'] = 'master/unit/update';
 $route['unit/destroy'] = 'master/unit/destroy';
 
+$route['jenis'] = 'master/jenis';
+$route['jenis/data'] = 'master/jenis/data';
+$route['jenis/create'] = 'master/jenis/create';
+$route['jenis/store'] = 'master/jenis/store';
+$route['jenis/edit'] = 'master/jenis/edit';
+$route['jenis/update'] = 'master/jenis/update';
+$route['jenis/destroy'] = 'master/jenis/destroy';
+
 $route['jabatan'] = 'master/jabatan';
 $route['jabatan/data'] = 'master/jabatan/data';
 $route['jabatan/create'] = 'master/jabatan/create';

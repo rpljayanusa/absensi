@@ -30,7 +30,7 @@
 </head>
 <!-- onload="window.print()" -->
 
-<body>
+<body onload="window.print()">
     <table class="table-list" border="0" style="width: 100%">
         <tr style="font-size: 12pt;">
             <td align="right" width="15%"></td>
@@ -38,15 +38,15 @@
                 <strong>
                     CV. Flazz Technologies<br />
                     Jl. Gajah Mada No. 11, Padang, Sumatera Barat<br />
-                    <?= $title ?>
+                    Jadwal Karyawan
                 </strong>
             </td>
             <td align="left" width="15%"></td>
         </tr>
     </table>
-    <table border="0" style="width: 100%; font-size: 10pt;">
+    <table border="0" style="width: 100%; font-size: 12pt;">
         <tr>
-            <td>Bulan : <?= bulan($bulan) . ' ' . $tahun ?></td>
+            <td><b>Bulan : <?= bulan($bulan) . ' ' . $tahun ?></b></td>
         </tr>
     </table>
     <table class="table-rincian" width="100%">

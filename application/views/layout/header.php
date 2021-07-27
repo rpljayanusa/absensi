@@ -13,7 +13,7 @@
                     <a href="<?= site_url('welcome') ?>"><i class="icon-home4"></i> Home</a>
                 </li>
                 <?php if (level_user() == 1) { ?>
-                    <li class="<?= $urls == "unit" || $urls == "jabatan" || $urls == "karyawan" ? "active" : null ?> dropdown">
+                    <li class="<?= $urls == "unit" || $urls == "jabatan" || $urls == "karyawan" || $urls == "jenis" ? "active" : null ?> dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-gallery"></i> Master Data <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li class="<?= $urls == "unit" ? "active" : null ?>">
@@ -24,6 +24,9 @@
                             </li>
                             <li class="<?= $urls == "karyawan" ? "active" : null ?>">
                                 <a href="<?= site_url('karyawan') ?>">Karyawan</a>
+                            </li>
+                            <li class="<?= $urls == "jenis" ? "active" : null ?>">
+                                <a href="<?= site_url('jenis') ?>">Jenis Cuti</a>
                             </li>
                         </ul>
                     </li>
