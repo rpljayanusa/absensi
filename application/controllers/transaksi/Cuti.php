@@ -137,6 +137,48 @@ class Cuti extends CI_Controller
                         );
                     endif;
                 endif;
+            } elseif ($jenis == 3) {
+                $data_jenis = $this->db->where('id_jenis', $jenis)->get('jenis_cuti')->row_array();
+                $data = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=3 AND status_cuti=4 AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result_array();
+                $data_input = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=3 AND status_cuti IN(0,1,2,3) AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result();
+                $total = 0;
+                foreach ($data as $d) {
+                    $awal  = date_create($d['mulai_cuti']);
+                    $akhir = date_create($d['selesai_cuti']);
+                    $diff  = date_diff($awal, $akhir);
+                    $lama = $diff->d + 1;
+                    $total = $total + $lama;
+                }
+                $sisa = $data_jenis['jumlah_hari'] - $total;
+                $awal1  = date_create($start);
+                $akhir1 = date_create($end);
+                $diff1  = date_diff($awal1, $akhir1);
+                $sisa = $data_jenis['jumlah_hari'] - $total;
+                $awal1  = date_create($start);
+                $akhir1 = date_create($end);
+                $diff1  = date_diff($awal1, $akhir1);
+                $lama1 = $diff1->d + 1;
+                if (count($data_input) > 0) :
+                    $json = array(
+                        'status' => '0100',
+                        'jenis' => 'tahunan',
+                        'pesan' => 'Cuti lainnya sudah diinputkan namun belum disetujui.'
+                    );
+                else :
+                    if ($lama1 > $sisa) :
+                        $json = array(
+                            'status' => '0100',
+                            'jenis' => 'tahunan',
+                            'pesan' => 'Anda hanya memiliki sisa cuti tahunan selama ' . $sisa . ' hari'
+                        );
+                    else :
+                        $this->Mcuti->store($post);
+                        $json = array(
+                            'status' => '0100',
+                            'pesan' => 'Data pengajuan cuti telah disimpan'
+                        );
+                    endif;
+                endif;
             } else {
                 $this->Mcuti->store($post);
                 $json = array(
@@ -285,6 +327,36 @@ class Cuti extends CI_Controller
                     echo '<div class="alert alert-danger alert-dismissible">Masa cuti melahirkan yang Anda ambil lebih dari 3 bulan yaitu selama ' . $Months->m . ' bulan ' . $Months->d . ' hari.</div>';
                 else :
                     echo '<div class="alert alert-success alert-dismissible">Anda mendapatkan masa cuti melahirkan selama ' . $Months->m . ' bulan.</div>';
+                endif;
+            endif;
+        } elseif ($jenis == 3) {
+            $data_jenis = $this->db->where('id_jenis', $jenis)->get('jenis_cuti')->row_array();
+            $data = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=3 AND status_cuti=4 AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result_array();
+            $data_input = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=3 AND status_cuti IN(0,1,2,3) AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result();
+            $total = 0;
+            foreach ($data as $d) {
+                $awal  = date_create($d['mulai_cuti']);
+                $akhir = date_create($d['selesai_cuti']);
+                $diff  = date_diff($awal, $akhir);
+                $lama = $diff->d + 1;
+                $total = $total + $lama;
+            }
+            $sisa = $data_jenis['jumlah_hari'] - $total;
+            $awal1  = date_create($start);
+            $akhir1 = date_create($end);
+            $diff1  = date_diff($awal1, $akhir1);
+            $sisa = $data_jenis['jumlah_hari'] - $total;
+            $awal1  = date_create($start);
+            $akhir1 = date_create($end);
+            $diff1  = date_diff($awal1, $akhir1);
+            $lama1 = $diff1->d + 1;
+            if (count($data_input) > 0) :
+                echo '<div class="alert alert-danger alert-dismissible">Cuti lainnya sudah diinputkan namun belum disetujui.</div>';
+            else :
+                if ($lama1 > $sisa) :
+                    echo '<div class="alert alert-danger alert-dismissible">Batas limit cuti lainnya sudah digunakan.</div>';
+                else :
+                    echo '<div class="alert alert-success alert-dismissible">Anda masih memiliki sisa lainnya selama ' . $sisa . ' hari.</div>';
                 endif;
             endif;
         }
