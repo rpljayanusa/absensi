@@ -71,6 +71,7 @@ class Cuti extends CI_Controller
             if ($jenis == 1) {
                 $data_jenis = $this->db->where('id_jenis', $jenis)->get('jenis_cuti')->row_array();
                 $data = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=1 AND status_cuti=4 AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result_array();
+                $data_input = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=1 AND status_cuti IN(0,1,2,3) AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result();
                 $total = 0;
                 foreach ($data as $d) {
                     $awal  = date_create($d['mulai_cuti']);
@@ -84,43 +85,58 @@ class Cuti extends CI_Controller
                 $akhir1 = date_create($end);
                 $diff1  = date_diff($awal1, $akhir1);
                 $lama1 = $diff1->d + 1;
-                if ($lama1 > $sisa) :
+                if (count($data_input) > 0) :
                     $json = array(
                         'status' => '0100',
                         'jenis' => 'tahunan',
-                        'pesan' => 'Anda hanya memiliki sisa cuti tahunan selama ' . $sisa . ' hari'
+                        'pesan' => 'Cuti tahunan sudah diinputkan namun belum disetujui'
                     );
                 else :
-                    $this->Mcuti->store($post);
-                    $json = array(
-                        'status' => '0100',
-                        'pesan' => 'Data pengajuan cuti telah disimpan'
-                    );
+                    if ($lama1 > $sisa) :
+                        $json = array(
+                            'status' => '0100',
+                            'jenis' => 'tahunan',
+                            'pesan' => 'Anda hanya memiliki sisa cuti tahunan selama ' . $sisa . ' hari'
+                        );
+                    else :
+                        $this->Mcuti->store($post);
+                        $json = array(
+                            'status' => '0100',
+                            'pesan' => 'Data pengajuan cuti telah disimpan'
+                        );
+                    endif;
                 endif;
             } elseif ($jenis == 2) {
                 $d1 = new DateTime($end);
                 $d2 = new DateTime($start);
                 $Months = $d2->diff($d1);
-                $howeverManyMonths = (($Months->y) * 12) + ($Months->m) - 1;
-                if ($howeverManyMonths < 3) {
+                if ($Months->m > 3) :
                     $json = array(
                         'status' => '0100',
                         'jenis' => 'tahunan',
-                        'pesan' => 'Batas limit cuti melahirkan selama 3 bulan.'
+                        'pesan' => 'Batas limit cuti melahirkan yang Anda ambil lebih dari 3 bulan.'
                     );
-                } else if ($howeverManyMonths > 3) {
+                elseif ($Months->m < 3) :
                     $json = array(
                         'status' => '0100',
                         'jenis' => 'tahunan',
-                        'pesan' => 'Batas limit cuti melahirkan hanya tersedia 3 bulan.'
+                        'pesan' => 'Masa cuti melahirkan yang Anda ambil kurang dari 3 bulan.'
                     );
-                } else {
-                    $this->Mcuti->store($post);
-                    $json = array(
-                        'status' => '0100',
-                        'pesan' => 'Data pengajuan cuti telah disimpan'
-                    );
-                }
+                elseif ($Months->m == 3) :
+                    if ($Months->d > 0) :
+                        $json = array(
+                            'status' => '0100',
+                            'jenis' => 'tahunan',
+                            'pesan' => 'Masa cuti melahirkan yang Anda ambil lebih dari 3 bulan yaitu selama ' . $Months->m . ' bulan ' . $Months->d . ' hari.'
+                        );
+                    else :
+                        $this->Mcuti->store($post);
+                        $json = array(
+                            'status' => '0100',
+                            'pesan' => 'Data pengajuan cuti telah disimpan'
+                        );
+                    endif;
+                endif;
             } else {
                 $this->Mcuti->store($post);
                 $json = array(
@@ -233,6 +249,7 @@ class Cuti extends CI_Controller
         if ($jenis == 1) {
             $data_jenis = $this->db->where('id_jenis', $jenis)->get('jenis_cuti')->row_array();
             $data = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=1 AND status_cuti=4 AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result_array();
+            $data_input = $this->db->query("SELECT * FROM cuti WHERE karyawan_cuti='$iduser' AND jenis_cuti=1 AND status_cuti IN(0,1,2,3) AND DATE_FORMAT(tgl_pengajuan,'%Y')='$tahun'")->result();
             $total = 0;
             foreach ($data as $d) {
                 $awal  = date_create($d['mulai_cuti']);
@@ -246,23 +263,30 @@ class Cuti extends CI_Controller
             $akhir1 = date_create($end);
             $diff1  = date_diff($awal1, $akhir1);
             $lama1 = $diff1->d + 1;
-            if ($lama1 > $sisa) :
-                echo '<div class="alert alert-danger alert-dismissible">Batas limit cuti tahunan sudah digunakan.</div>';
+            if (count($data_input) > 0) :
+                echo '<div class="alert alert-danger alert-dismissible">Cuti tahunan sudah diinputkan namun belum disetujui.</div>';
             else :
-                echo '<div class="alert alert-success alert-dismissible">Anda masih memiliki sisa cuti tahunan selama ' . $sisa . ' hari.</div>';
+                if ($lama1 > $sisa) :
+                    echo '<div class="alert alert-danger alert-dismissible">Batas limit cuti tahunan sudah digunakan.</div>';
+                else :
+                    echo '<div class="alert alert-success alert-dismissible">Anda masih memiliki sisa cuti tahunan selama ' . $sisa . ' hari.</div>';
+                endif;
             endif;
         } elseif ($jenis == 2) {
             $d1 = new DateTime($end);
             $d2 = new DateTime($start);
             $Months = $d2->diff($d1);
-            $howeverManyMonths = (($Months->y) * 12) + ($Months->m) - 1;
-            if ($howeverManyMonths < 3) {
-                echo '<div class="alert alert-danger alert-dismissible">Batas limit cuti melahirkan selama 3 bulan.</div>';
-            } else if ($howeverManyMonths > 3) {
-                echo '<div class="alert alert-danger alert-dismissible">Batas limit cuti melahirkan hanya tersedia 3 bulan.</div>';
-            } else {
-                echo '<div class="alert alert-success alert-dismissible">Anda mendapatkan masa cuti melahirkan selama ' . $howeverManyMonths . ' bulan.</div>';
-            }
+            if ($Months->m > 3) :
+                echo '<div class="alert alert-danger alert-dismissible">Batas limit cuti melahirkan yang Anda ambil lebih dari 3 bulan.</div>';
+            elseif ($Months->m < 3) :
+                echo '<div class="alert alert-danger alert-dismissible">Masa cuti melahirkan yang Anda ambil kurang dari 3 bulan.</div>';
+            elseif ($Months->m == 3) :
+                if ($Months->d > 0) :
+                    echo '<div class="alert alert-danger alert-dismissible">Masa cuti melahirkan yang Anda ambil lebih dari 3 bulan yaitu selama ' . $Months->m . ' bulan ' . $Months->d . ' hari.</div>';
+                else :
+                    echo '<div class="alert alert-success alert-dismissible">Anda mendapatkan masa cuti melahirkan selama ' . $Months->m . ' bulan.</div>';
+                endif;
+            endif;
         }
     }
 }
