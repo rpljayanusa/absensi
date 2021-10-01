@@ -8,6 +8,7 @@ class Mkaryawan extends CI_Model
         return $this->db->from('karyawan')
             ->join('jabatan', 'id_jabatan=jabatan_karyawan')
             ->join('unit', 'id_unit=unit_karyawan')
+            ->order_by('idabsen_karyawan')
             ->get()->result_array();
     }
     public function kode()
