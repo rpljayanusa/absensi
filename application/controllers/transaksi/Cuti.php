@@ -165,7 +165,13 @@ class Cuti extends CI_Controller
                         'pesan' => 'Cuti lainnya sudah diinputkan namun belum disetujui.'
                     );
                 else :
-                    if ($lama1 > $sisa) :
+                    if ($sisa == 0) :
+                        $json = array(
+                            'status' => '0100',
+                            'jenis' => 'tahunan',
+                            'pesan' => 'Batas limit cuti lainnya sudah digunakan.'
+                        );
+                    elseif ($lama1 > $sisa) :
                         $json = array(
                             'status' => '0100',
                             'jenis' => 'tahunan',
