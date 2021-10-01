@@ -62,6 +62,9 @@
                     <li class="<?= $urls == "cuti" ? "active" : null ?>">
                         <a href="<?= site_url('cuti') ?>"><i class="icon-clipboard5"></i> Pengajuan Cuti</a>
                     </li>
+                    <li class="<?= $urls == "laporan" ? "active" : null ?>">
+                        <a href="<?= site_url('laporan') ?>"><i class="icon-file-presentation2"></i> Laporan</a>
+                    </li>
                 <?php } ?>
             </ul>
         </div>
