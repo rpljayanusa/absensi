@@ -169,7 +169,7 @@ class Cuti extends CI_Controller
                         $json = array(
                             'status' => '0100',
                             'jenis' => 'tahunan',
-                            'pesan' => 'Anda hanya memiliki sisa cuti tahunan selama ' . $sisa . ' hari'
+                            'pesan' => 'Anda hanya memiliki sisa cuti lainnya selama ' . $sisa . ' hari'
                         );
                     else :
                         $this->Mcuti->store($post);
